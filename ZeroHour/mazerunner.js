@@ -50,8 +50,62 @@ function solveMaze() {
     let nextStep = [];
     let prevRow = curRow;
     let prevCol = curCol;
+
     // Test for our moves
     moveUP = move(curRow, curCol, grid, directions.UP);
+    if (moveUp.canMove == true){
+        nextStep.push(moveUp);
+    }
+
+    moveDown = move(curRow, curCol, grid, directions.DOWN);
+    if (moveDown.canMove == true){
+        nextStep.push(moveDown);
+    }
+
+    moveLeft = move(curRow, curCol, grid, directions.LEFT);
+    if (moveLeft.canMove == true){
+        nextStep.push(moveLeft);
+    }
+
+    moveRight = move(curRow, curCol, grid, directions.RIGHT);
+    if (moveRight.canMove == true){
+        nextStep.push(moveRight);
+    }
+
+    // Test to see if we have no where to go - Exit!
+    if (nextStep.length == 0) {
+        noExit = true;
+        break;
+    }
+
+    // Sorting nextstep by min. distance
+    nextStep.sort((a, b) => (a.minDistance - b.minDistance));
+
+    switch (nextStep[0].direction) {
+        case directions.UP:
+            // Move up and add to the step count
+            stepCount++;
+            curRow = curRow + 1;
+            break;
+        case directions.DOWN:
+            // Move down and add to the step count
+            stepCount++;
+            curRow = curRow - 1;
+            break;
+        case directions.LEFT:
+            // Move left and add to the step count
+            stepCount++;
+            curCol = curCol - 1;
+            break;
+        case directions.RIGHT:
+            // Move right and add to step count
+            stepCount++;
+            curCol = curCol + 1;
+            break;
+    }
+
+    // Marking the Squares on the page
+    exitReached = markElements(curRow, curCol, prevRow, prevCol, grid);
 
   } while (exitReached == false || noExit == true);
   if (exitReached == true) {
@@ -136,5 +190,11 @@ move(curRow, curCol, grid, direction) {
         direction: direction,
         colValue: colValues.WALL
     }
+}
+
+// Gets the minDistance between target and exit
+function GetMinDistance(targetRow, targetCol) {
+    // Steps required from current position to the exit 
+    return Math.abs(exitRow - targetRow) + Math.abs((exitCol - targetCol));
 }
 
