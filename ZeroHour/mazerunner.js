@@ -44,4 +44,97 @@ function solveMaze() {
   grid[startRow][startCol] = colValues.PATH;
   var elementID = `${startRow}:${startCol}`;
   document.getElementById(elementID).setAttribute("blockValue", "step");
+
+  // Solve the maze
+  do {
+    let nextStep = [];
+    let prevRow = curRow;
+    let prevCol = curCol;
+    // Test for our moves
+    moveUP = move(curRow, curCol, grid, directions.UP);
+
+  } while (exitReached == false || noExit == true);
+  if (exitReached == true) {
+    document.getElementById(
+      "results"
+    ).innerHTML = `Success! It took ${stepCount} step(s).`;
+  } else {
+    document.getElementById("results").innerHTML = "Cannot find an Exit!";
+  }
 }
+
+move(curRow, curCol, grid, direction) {
+    var targetRow = curRow;
+    var targetCol = curCol;
+    var targetVal = "";
+    // Can we move there?
+    var canMove = false;
+    var minDistance = -1;
+
+    switch (direction) {
+        case directions.UP:
+            targetRow = curRow + 1;
+            break;
+        case directions.LEFT:
+            targetCol = curCol - 1;
+            break;
+        case directions.RIGHT:
+            targetCol = curCol + 1;
+            break;
+        case directions.DOWN:
+            targetRow = curRow - 1;
+            break;
+    }
+
+    // Check wether or not we are out of bounds
+    if (targetRow > grid.length - 1 || targetRow < 0 || targetCol > grid[targetRow].length || targetCol < 0){
+        return {
+            canMove: false,
+            minDistance: -1,
+            direction: direction,
+            colValue: colValues.WALL
+        };
+    }
+
+    // Get the value of the square user is trying to go to
+    targetVal = grid[targetRow][targetCol];
+
+    if (targetRow == startRow && targetCol == startCol) {
+        // We cannot move back to the start position.
+        return {
+            canMove: false,
+            minDistance: -1,
+            direction: direction,
+            colValue: colValues.WALL
+        };
+    } else if (targetVal == colValues.WALL || targetVal == colValues.DEADEND) {
+        // Testing wether or not a wall is deadend
+        // 't' stands for wall; 'fx' = deadend
+        return {
+            canMove: false,
+            minDistance: -1,
+            direction: direction,
+            colValue: targetVal
+        }
+    } else if (targetVal == colValues.PATH) {
+        /*  
+            if you have to go backwards to a previous marked square
+            we need to mark the current square as deadend ('fx')
+            'fp' stands for 'already marked square'
+        */
+       return {
+           canMove: true,
+           minDistance: GetMinDistance(targetRow, targetCol),
+           direction: direction,
+           colValue: targetVal
+       }
+    }
+    // Default return - If things go wrong...
+    return {
+        canMove: false,
+        minDistance: -1,
+        direction: direction,
+        colValue: colValues.WALL
+    }
+}
+
