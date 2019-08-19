@@ -6,9 +6,9 @@ You are given an R by C matrix consisting of booleans that represents a board. E
 
 For example, given the following board:
   
- [[f, f, f, f],
-[t, t, f, t],
-[f, f, f, f],
+ [[f, f, f, f], <br/>
+[t, t, f, t], <br/>
+[f, f, f, f], <br/>
 [f, f, f, f]]
   
 and start = (0, 0)(bottom left) and end = (3, 0)(top left), the minimum number of steps required to reach the end is 7, since we would need to go through (1, 2) because there is a wall everywhere else on the second row.
