@@ -40,7 +40,7 @@ const grid5 = [
 ];
 
 // Boolean global variable - current grid that's selected
-cGrid = [];
+var cGrid = [];
 
 // Render rows and columns for a grid
 function displayGrid(grid, title) {
